@@ -39,8 +39,8 @@ const postData = (req, res) => {
 // GET Route
 app.post("/add", postData);
 
-const port = 4000;
-const hostname = "127.0.0.1";
+const port = 3000;
+const hostname = "localhost";
 
 // function to test the server
 const listening = () =>

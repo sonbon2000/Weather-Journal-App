@@ -2,7 +2,7 @@
 const API_KEY = ",&appid=d24bf70d6dae818a6893be61edd0ae3c&units=metric";
 const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 // the URL of the server to post data
-const server = "http://127.0.0.1:4000";
+const server = "http://localhost:3000";
 
 // showing the error to the user
 const error = document.getElementById("error");
