@@ -4,22 +4,13 @@ const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 // the URL of the server to post data
 const server = "http://localhost:3000";
 
-// showing the error to the user
-const error = document.getElementById("error");
-
 // Creating a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.toDateString();
 
 /**
- * // generateData //
- * function to get input values
- * call getData to fetch the data from API
- * create object from API object by using destructuring
- * post the data in the server
- * get the data to update UI
+ * Generate Data function to generate API
  */
-
 const generateData = () => {
   //get value after click on the button
   const zip = document.getElementById("zip").value;
@@ -35,17 +26,15 @@ const generateData = () => {
         weather: [{ description }],
       } = data;
 
-      const info = {
+      const addData = {
         newDate,
         city,
-        temp: Math.round(temp), // to get integer number
+        temp: Math.round(temp),
         description,
         feelings,
       };
-
-      postData(server + "/add", info);
+      postData(server + "/add", addData);
       updatingUI();
-      document.getElementById("entry").style.opacity = 1;
     }
   });
 };
@@ -58,14 +47,6 @@ const getData = async (zip) => {
   try {
     const res = await fetch(baseURL + zip + API_KEY);
     const data = await res.json();
-
-    if (data.cod != 200) {
-      // display the error message on UI
-      error.innerHTML = data.message;
-      setTimeout((_) => (error.innerHTML = ""), 2000);
-      throw `${data.message}`;
-    }
-
     return data;
   } catch (error) {}
 };
@@ -82,12 +63,11 @@ const postData = async (url = "", info = {}) => {
 
   try {
     const newData = await res.json();
-    console.log(`You just saved`, newData);
     return newData;
   } catch (error) {}
 };
 
-// Updating UI by this data
+// Updating UI to generate to web pages
 const updatingUI = async () => {
   const res = await fetch(server + "/all");
   try {
