@@ -1,151 +1,99 @@
-@import url("https://fonts.googleapis.com/css?family=Hind+Siliguri|Josefin+Sans:700|Overpass&display=swap");
-
 body {
+	margin: 0;
+	padding: 0;
+	background: url(./bg.jpg);
+	background-position: center center;
+	background-size: cover;
+	background-attachment: fixed;
 	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-	margin-left: 10%;
-	margin-right: 10%;
-}
-
-.container {
-	display: grid;
-	grid-template-columns: 100%;
-	grid-template-rows: minmax(50px, auto);
-	grid-template-areas:
-		"hd"
-		"zip"
-		"feeling"
-		"add"
-		"entry";
-}
-
-#app {
-	margin: 30px auto;
-	padding: 2rem 1.25rem;
-	position: relative;
-	background-color: #fff;
-	margin-bottom: 3rem;
-	z-index: 999;
-	box-shadow: 2px 5px 6px 6px rgba(0, 0, 0, 0.3), 9px 11px 11px 0 rgba(0, 0, 0, 0.4);
-	color: black;
-	grid-gap: 1em;
-	font-size: 20px;
-	font-family: "Hind Siliguri", sans-serif;
-	line-height: 2.5em;
-}
-
-.holder {
-	margin: 5px auto;
-}
-
-.entry {
-	width: 60%;
-	margin: 20px auto;
-	grid-area: entry;
-	padding: 9px 35px 92px 19px;
-	box-shadow: 2px 5px 6px 6px rgba(0, 0, 0, 0.3), 9px 11px 11px 0 rgba(0, 0, 0, 0.4);
-}
-
-#entryHolder {
-	color: black;
-}
-
-#date {
-	color: firebrick;
-	font-weight: bold;
-}
-
-#temp {
-	color: firebrick;
-	font-weight: bolder;
-}
-
-#contentry {
-	color: firebrick;
-	font-weight: bolder;
 }
 
 .headline {
-	grid-area: hd;
-	padding-left: 30px;
+	color: white;
+	font-size: 25px;
+	background-color: #0a113a;
+	padding: 10px;
+	text-align: center;
 }
 
-.zip {
-	grid-area: zip;
+#zip,
+#feelings,
+#generate {
+	background: #17053866;
+	margin: 60px auto 0px;
+	width: 40%;
+	outline: none;
+	border: none;
+	border-radius: 20px;
+	height: 38px;
+	text-align: center;
+	color: white;
+	display: block;
+	font-size: 15px;
+	resize: none;
 }
 
-.feel {
-	grid-area: feeling;
+#zip::placeholder,
+#feelings::placeholder {
+	color: white;
+	font-family: sans-serif;
+	line-height: 38px;
 }
 
-.generate-button {
-	grid-area: add;
+#error {
+	background-color: #e91e63;
+	color: white;
+	font-size: large;
+	width: 22%;
+	text-align: center;
+	margin: 0px auto 12px;
+	border-radius: 1px 0px 30px 30px;
+	display: block;
+}
+
+#feelings {
+	margin-top: 0;
 }
 
 #generate {
-	color: whitesmoke;
+	width: 20%;
+	margin-top: 18px;
+	background: #0a113a;
 	cursor: pointer;
 }
 
-.title {
-	font-family: sans-serif;
-	font-size: 23px;
-	color: #3b4b71;
-}
-
-label {
-	display: block;
-	font-size: 18px;
-	font-weight: 600;
-	color: #221e1d;
-	text-align: centryer;
-}
-
-input {
-	display: block;
-	height: 32px;
-	width: 180px;
-	border-radius: 5px;
-	background: whitesmoke;
-	color: #000;
-	font-size: 16px;
-	font-family: "Overpass", sans-serif;
-	border: 1px solid black;
-	padding-left: 5px;
-	text-align: centryer;
-	margin: 0 auto;
-}
-
-button {
-	width: 300px;
-	height: 50px;
+#entry {
+	width: 50%;
+	background: #07133340;
+	margin: 50px auto;
 	border-radius: 10px;
-	background: #3b4873;
-	color: aliceblue;
-	font-size: 23px;
-	font-family: "Overpass", sans-serif;
-	border: none;
-	box-shadow: 2px 4px 5px #444;
+	height: 208px;
+	opacity: 0;
+	transition: all 2s ease;
 }
 
-h1 {
-	font-family: sans-serif;
-	font-size: 33px;
-	color: #221e1d;
+.title {
+	padding: 10px;
+	text-align: center;
+	font-size: 17px;
 }
 
-textarea {
-	background: whitesmoke;
-	color: dimgrey;
-	padding: 5px;
-	font-size: 15px;
-	font-family: sans-serif;
-	border: 1px solid black;
+#entryHolder {
+	text-align: center;
+	align-items: center;
+	width: 100%;
+	height: 80%;
+	display: grid;
+	grid-template-rows: 60%;
+	grid-template-columns: 50% 50%;
+	font-size: 1.5vw;
 }
 
-/* Reset style for HTML elementry on active to have no border*/
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-	outline: none;
+#content {
+	grid-column: 1 / -1;
+}
+
+#temp,
+#city {
+	font-size: 4vw;
 }

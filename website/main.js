@@ -1,108 +1,101 @@
 // Personal API Key for OpenWeatherMap API
-const API_KEY = "&APPID=e23122c5062eb361eb2aa6ee3762e1db&units=imperial";
+const API_KEY = ",&appid=d24bf70d6dae818a6893be61edd0ae3c&units=metric";
 const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
+// the URL of the server to post data
+const server = "http://127.0.0.1:4000";
 
-// Convert date
-function convertDate(unixtimestamp) {
-	// Months array
-	var months_array = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+// showing the error to the user
+const error = document.getElementById("error");
 
-	// Convert timestamp to milliseconds
-	var date = new Date(unixtimestamp * 1000);
+// Creating a new date instance dynamically with JS
+let d = new Date();
+let newDate = d.toDateString();
 
-	// Year
-	var year = date.getFullYear();
+/**
+ * // generateData //
+ * function to get input values
+ * call getData to fetch the data from API
+ * create object from API object by using destructuring
+ * post the data in the server
+ * get the data to update UI
+ */
 
-	// Month
-	var month = months_array[date.getMonth()];
+const generateData = () => {
+  //get value after click on the button
+  const zip = document.getElementById("zip").value;
+  const feelings = document.getElementById("feelings").value;
 
-	// Day
-	var day = date.getDate();
+  // getData return promise
+  getData(zip).then((data) => {
+    //making sure from the received data to execute rest of the steps
+    if (data) {
+      const {
+        main: { temp },
+        name: city,
+        weather: [{ description }],
+      } = data;
 
-	// Display date time in MM/dd/yyyy format
-	var convertedTime = month + "/" + day + "/" + year;
+      const info = {
+        newDate,
+        city,
+        temp: Math.round(temp), // to get integer number
+        description,
+        feelings,
+      };
 
-	return convertedTime;
-}
-
-// Event listener to add function to existing HTML DOM element
-/* Function called by event listener */
-document.getElementById("generate").addEventListener("click", displayAction);
-
-function displayAction() {
-	const zip = document.getElementById("zip").value;
-	const feelings = document.getElementById("feelings").value;
-
-	getDataApi(baseURL, zip, API_KEY)
-		.then(function (data) {
-			// Add data
-			console.log("AllData from api: ", data);
-			postDataApi("/addWeatherData", {
-				temperature: data.main.temp,
-				date: convertDate(data.dt),
-				userResponse: feelings,
-			});
-		})
-		.then(() => updateUI());
-}
-
-// Async GET
-/* Function to GET Web API Data*/
-const getDataApi = async (baseURL, zip, API_KEY) => {
-	if (zip.toString().length !== 5) {
-		alert("zip should be of length 5!");
-	} else {
-		/* Please note as country is not specified so, the search works for USA as a default. */
-		const url = `${baseURL}${zip}${API_KEY}`;
-
-		const request = await fetch(url);
-		try {
-			// Transform into JSON
-			const allData = await request.json();
-			if (allData.message) {
-				alert(allData.message);
-			} else {
-				return allData;
-			}
-		} catch (error) {
-			console.log("error", error);
-			// appropriately handle the error
-		}
-	}
+      postData(server + "/add", info);
+      updatingUI();
+      document.getElementById("entry").style.opacity = 1;
+    }
+  });
 };
 
-// Async POST
-/* Function to POST data */
-// Async POST
-const postDataApi = async (url = "", data = {}) => {
-	console.log("post weather data: ", data);
-	const response = await fetch(url, {
-		method: "POST",
-		credentials: "same-origin",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify(data), // body data type must match "Content-Type" header
-	});
+// Function invoke API
+document.getElementById("generate").addEventListener("click", generateData);
 
-	try {
-		const newData = await response.json();
-		console.log("post res: ", newData);
-	} catch (error) {
-		console.log("error", error);
-	}
+//GET data function
+const getData = async (zip) => {
+  try {
+    const res = await fetch(baseURL + zip + API_KEY);
+    const data = await res.json();
+
+    if (data.cod != 200) {
+      // display the error message on UI
+      error.innerHTML = data.message;
+      setTimeout((_) => (error.innerHTML = ""), 2000);
+      throw `${data.message}`;
+    }
+
+    return data;
+  } catch (error) {}
 };
 
-/* Function to update UI */
-const updateUI = async () => {
-	const request = await fetch("/all");
-	try {
-		const data = await request.json();
-		console.log("updateUI: ", data);
-		document.getElementById("date").innerHTML = `Date: ${data.date}`;
-		document.getElementById("temp").innerHTML = `Temperature(°C): ${data.temperature}`;
-		document.getElementById("content").innerHTML = `Feelings: ${data.userResponse}`;
-	} catch (error) {
-		console.log("error", error);
-	}
+//  POST data function
+const postData = async (url = "", info = {}) => {
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(info),
+  });
+
+  try {
+    const newData = await res.json();
+    console.log(`You just saved`, newData);
+    return newData;
+  } catch (error) {}
+};
+
+// Updating UI by this data
+const updatingUI = async () => {
+  const res = await fetch(server + "/all");
+  try {
+    const savedData = await res.json();
+    document.getElementById("date").innerHTML = savedData.newDate;
+    document.getElementById("city").innerHTML = savedData.city;
+    document.getElementById("temp").innerHTML = savedData.temp + "&degC";
+    document.getElementById("description").innerHTML = savedData.description;
+    document.getElementById("content").innerHTML = savedData.feelings;
+  } catch (error) {}
 };
