@@ -1,81 +1,111 @@
 // Personal API Key for OpenWeatherMap API
-const API_KEY = ",&appid=d24bf70d6dae818a6893be61edd0ae3c&units=metric";
+const API_KEY = "&APPID=e23122c5062eb361eb2aa6ee3762e1db&units=imperial";
 const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
-// the URL of the server to post data
-const server = "http://localhost:3000";
 
-// Creating a new date instance dynamically with JS
-let d = new Date();
-let newDate = d.toDateString();
+// Get element
+const button = document.querySelector("#generate");
+const dateRes = document.querySelector("#date");
+const tempRes = document.querySelector("#temp");
+const contentRes = document.querySelector("#content");
+const inputZip = document.querySelector("#zip");
+const inputFeelings = document.querySelector("#feelings");
 
-/**
- * Generate Data function to generate API
- */
-const generateData = () => {
-  //get value after click on the button
-  const zip = document.getElementById("zip").value;
-  const feelings = document.getElementById("feelings").value;
+// Generate date
+function convertDate(unixtimestamp) {
+  // Months array
+  var months_array = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
 
-  // getData return promise
-  getData(zip).then((data) => {
-    //making sure from the received data to execute rest of the steps
-    if (data) {
-      const {
-        main: { temp },
-        name: city,
-        weather: [{ description }],
-      } = data;
+  // Convert timestamp to milliseconds
+  var date = new Date(unixtimestamp * 1000);
 
-      const addData = {
-        newDate,
-        city,
-        temp: Math.round(temp),
-        description,
-        feelings,
-      };
-      postData(server + "/add", addData);
-      updatingUI();
-    }
-  });
-};
+  // Year
+  var year = date.getFullYear();
 
-// Function invoke API
-document.getElementById("generate").addEventListener("click", generateData);
+  // Month
+  var month = months_array[date.getMonth()];
 
-//GET data function
-const getData = async (zip) => {
+  // Day
+  var day = date.getDate();
+
+  // Display date time in MM/dd/yyyy format
+  var convertedTime = month + "/" + day + "/" + year;
+
+  return convertedTime;
+}
+
+// Event listener to add function to existing HTML DOM element
+/* Function called by event listener */
+button.addEventListener("click", generateData);
+
+function generateData() {
+  getDataApi(baseURL, inputZip.value, API_KEY)
+    .then(function (data) {
+      // Add data
+      postDataApi("/addWeatherData", {
+        temperature: data.main.temp,
+        date: convertDate(data.dt),
+        userResponse: inputFeelings.value,
+      });
+    })
+    .then(() => render());
+}
+
+// Async GET
+/* Function to GET Web API Data*/
+const getDataApi = async (baseURL, zip, API_KEY) => {
+  const url = `${baseURL}${zip}${API_KEY}`;
+  const res = await fetch(url);
   try {
-    const res = await fetch(baseURL + zip + API_KEY);
-    const data = await res.json();
-    return data;
-  } catch (error) {}
+    const allData = await res.json();
+    return allData;
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
-//  POST data function
-const postData = async (url = "", info = {}) => {
-  const res = await fetch(url, {
+// Async POST
+/* Function to POST data */
+// Async POST
+const postDataApi = async (url = "", data = {}) => {
+  const response = await fetch(url, {
     method: "POST",
+    credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(info),
+    body: JSON.stringify(data),
   });
 
   try {
-    const newData = await res.json();
+    const newData = await response.json();
     return newData;
-  } catch (error) {}
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 
-// Updating UI to generate to web pages
-const updatingUI = async () => {
-  const res = await fetch(server + "/all");
+/* Function to update UI */
+const render = async () => {
+  const request = await fetch("/all");
   try {
-    const savedData = await res.json();
-    document.getElementById("date").innerHTML = savedData.newDate;
-    document.getElementById("city").innerHTML = savedData.city;
-    document.getElementById("temp").innerHTML = savedData.temp + "&degC";
-    document.getElementById("description").innerHTML = savedData.description;
-    document.getElementById("content").innerHTML = savedData.feelings;
-  } catch (error) {}
+    const res = await request.json();
+    dateRes.textContent = res.date;
+    tempRes.textContent = res.temperature;
+    contentRes.textContent = res.userResponse;
+  } catch (error) {
+    console.log("error", error);
+  }
 };
