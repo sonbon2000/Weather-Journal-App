@@ -1,4 +1,4 @@
-// Personal API Key for OpenWeatherMap API
+// Set up Personal Infor
 const API_KEY = "&APPID=e23122c5062eb361eb2aa6ee3762e1db&units=imperial";
 const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 
@@ -10,7 +10,7 @@ const contentRes = document.querySelector("#content");
 const inputZip = document.querySelector("#zip");
 const inputFeelings = document.querySelector("#feelings");
 
-// Generate date
+// Convert date
 function convertDate(date) {
   // Months array
   var monthArr = [
@@ -46,8 +46,7 @@ function convertDate(date) {
   return convert;
 }
 
-// Event listener to add function to existing HTML DOM element
-/* Function called by event listener */
+// Function call API
 button.addEventListener("click", generateData);
 
 function generateData() {
@@ -63,8 +62,7 @@ function generateData() {
     .then(() => render());
 }
 
-// Async GET
-/* Function to GET Web API Data*/
+// Function GET
 const getDataApi = async (baseURL, zip, API_KEY) => {
   const url = `${baseURL}${zip}${API_KEY}`;
   const res = await fetch(url);
@@ -76,9 +74,7 @@ const getDataApi = async (baseURL, zip, API_KEY) => {
   }
 };
 
-// Async POST
-/* Function to POST data */
-// Async POST
+// Function POST
 const postDataApi = async (url = "", data = {}) => {
   const response = await fetch(url, {
     method: "POST",
@@ -96,7 +92,7 @@ const postDataApi = async (url = "", data = {}) => {
   }
 };
 
-/* Function to update UI */
+// Render UI
 const render = async () => {
   const request = await fetch("/all");
   try {
