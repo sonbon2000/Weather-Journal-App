@@ -11,9 +11,9 @@ const inputZip = document.querySelector("#zip");
 const inputFeelings = document.querySelector("#feelings");
 
 // Generate date
-function convertDate(unixtimestamp) {
+function convertDate(date) {
   // Months array
-  var months_array = [
+  var monthArr = [
     "Jan",
     "Feb",
     "Mar",
@@ -29,21 +29,21 @@ function convertDate(unixtimestamp) {
   ];
 
   // Convert timestamp to milliseconds
-  var date = new Date(unixtimestamp * 1000);
+  var date = new Date(date * 1000);
 
   // Year
   var year = date.getFullYear();
 
   // Month
-  var month = months_array[date.getMonth()];
+  var month = monthArr[date.getMonth()];
 
   // Day
   var day = date.getDate();
 
   // Display date time in MM/dd/yyyy format
-  var convertedTime = month + "/" + day + "/" + year;
+  var convert = month + "/" + day + "/" + year;
 
-  return convertedTime;
+  return convert;
 }
 
 // Event listener to add function to existing HTML DOM element
@@ -82,7 +82,6 @@ const getDataApi = async (baseURL, zip, API_KEY) => {
 const postDataApi = async (url = "", data = {}) => {
   const response = await fetch(url, {
     method: "POST",
-    credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
     },
