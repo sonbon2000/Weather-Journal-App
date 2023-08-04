@@ -15,7 +15,7 @@ function searchWeather() {
   getWeatherData(baseURL, inputCities.value, API_KEY)
     .then(function (data) {
       // Add data
-      postWeatherData("/add", {});
+      postWeatherData("/add", data);
     })
     .then(() => render());
 }
@@ -53,9 +53,9 @@ const postWeatherData = async (url = "", data = {}) => {
 
 // Render UI
 const render = async () => {
-  const request = await fetch("/all");
+  const res = await fetch("/get");
   try {
-    const res = await request.json();
+    const res = await res.json();
     nameRes.textContent = `Cities name: ${res?.name}`;
     tempRes.textContent = `Temperature: ${res?.main?.temp}`;
   } catch (error) {

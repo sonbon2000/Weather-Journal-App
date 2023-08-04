@@ -20,16 +20,6 @@ app.use(cors());
 // Set up folders
 app.use(express.static("website"));
 
-// Setup Server
-const port = 3000;
-
-const listening = () => {
-  console.log("server running");
-  console.log(`running on localhost:${port}`);
-};
-
-const server = app.listen(port, listening);
-
 // GET route
 const getData = (req, res) => {
   res.send(projectData);
@@ -42,3 +32,13 @@ const addData = (req, res) => {
   res.send(projectData);
 };
 app.post("/add", addData);
+
+// Setup Server
+const port = 3000;
+
+const listening = () => {
+  console.log("server running");
+  console.log(`running on localhost:${port}`);
+};
+
+const server = app.listen(port, listening);
