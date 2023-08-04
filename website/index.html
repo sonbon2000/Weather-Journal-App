@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Journal</title>
     <link
       href="https://fonts.googleapis.com/css?family=Oswald:400,600,700|Ranga:400,700&display=swap"
@@ -15,19 +16,14 @@
       <div class="col-md-12">
         <h1>Weather Journal App</h1>
         <fieldset>
-          <label for="zip">Enter zip:</label>
-          <input type="text" id="zip" name="user_name" />
-        </fieldset>
-        <fieldset>
-          <label for="feelings">Enter feelings:</label>
-          <input type="text" id="feelings" name="user_email" />
+          <label for="cities">Enter cities:</label>
+          <input type="text" id="cities" name="cities" value="Ho chi minh" />
         </fieldset>
 
-        <button type="submit" id="generate">Generate</button>
+        <button type="submit" id="generate">Search</button>
         <fieldset>
-          <p id="date"></p>
+          <p id="name"></p>
           <p id="temp"></p>
-          <p id="content"></p>
         </fieldset>
       </div>
     </div>

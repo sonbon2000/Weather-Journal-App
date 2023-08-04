@@ -31,14 +31,14 @@ const listening = () => {
 const server = app.listen(port, listening);
 
 // GET route
-const sendData = (req, res) => {
+const getData = (req, res) => {
   res.send(projectData);
 };
-app.get("/all", sendData);
+app.get("/get", getData);
 
 // POST route
-const addWeatherData = (req, res) => {
+const addData = (req, res) => {
   projectData = req.body;
   res.send(projectData);
 };
-app.post("/addWeatherData", addWeatherData);
+app.post("/add", addData);

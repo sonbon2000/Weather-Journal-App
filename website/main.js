@@ -1,70 +1,28 @@
 // Set up Personal Infor
-const API_KEY = "&APPID=e23122c5062eb361eb2aa6ee3762e1db&units=imperial";
+const API_KEY = "06f40b330b9c3a4210db6559e399ba03";
 const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 
 // Get element
 const button = document.querySelector("#generate");
-const dateRes = document.querySelector("#date");
+const nameRes = document.querySelector("#name");
 const tempRes = document.querySelector("#temp");
-const contentRes = document.querySelector("#content");
-const inputZip = document.querySelector("#zip");
-const inputFeelings = document.querySelector("#feelings");
-
-// Convert date
-function convertDate(date) {
-  // Months array
-  var monthArr = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-
-  // Convert timestamp to milliseconds
-  var date = new Date(date * 1000);
-
-  // Year
-  var year = date.getFullYear();
-
-  // Month
-  var month = monthArr[date.getMonth()];
-
-  // Day
-  var day = date.getDate();
-
-  // Display date time in MM/dd/yyyy format
-  var convert = month + "/" + day + "/" + year;
-
-  return convert;
-}
+const inputCities = document.querySelector("#cities");
 
 // Function call API
-button.addEventListener("click", generateData);
+button.addEventListener("click", searchWeather);
 
-function generateData() {
-  getDataApi(baseURL, inputZip.value, API_KEY)
+function searchWeather() {
+  getWeatherData(baseURL, inputCities.value, API_KEY)
     .then(function (data) {
       // Add data
-      postDataApi("/addWeatherData", {
-        temperature: data.main.temp,
-        date: convertDate(data.dt),
-        userResponse: inputFeelings.value,
-      });
+      postWeatherData("/add", {});
     })
     .then(() => render());
 }
 
 // Function GET
-const getDataApi = async (baseURL, zip, API_KEY) => {
-  const url = `${baseURL}${zip}${API_KEY}`;
+const getWeatherData = async (baseURL, cities, API_KEY) => {
+  const url = `${baseURL}${cities}&appid=${API_KEY}`;
   const res = await fetch(url);
   try {
     const allData = await res.json();
@@ -75,9 +33,10 @@ const getDataApi = async (baseURL, zip, API_KEY) => {
 };
 
 // Function POST
-const postDataApi = async (url = "", data = {}) => {
+const postWeatherData = async (url = "", data = {}) => {
   const response = await fetch(url, {
     method: "POST",
+    credentials: "same-origin",
     headers: {
       "Content-Type": "application/json",
     },
@@ -97,9 +56,8 @@ const render = async () => {
   const request = await fetch("/all");
   try {
     const res = await request.json();
-    dateRes.textContent = res.date;
-    tempRes.textContent = res.temperature;
-    contentRes.textContent = res.userResponse;
+    nameRes.textContent = `Cities name: ${res?.name}`;
+    tempRes.textContent = `Temperature: ${res?.main?.temp}`;
   } catch (error) {
     console.log("error", error);
   }
