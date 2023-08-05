@@ -55,9 +55,9 @@ const postWeatherData = async (url = "", data = {}) => {
 const render = async () => {
   const res = await fetch("/get");
   try {
-    const res = await res.json();
-    nameRes.textContent = `Cities name: ${res?.name}`;
-    tempRes.textContent = `Temperature: ${res?.main?.temp}`;
+    const resData = await res.json();
+    nameRes.textContent = `Cities name: ${resData?.name}`;
+    tempRes.textContent = `Temperature: ${resData?.main?.temp}`;
   } catch (error) {
     console.log("error", error);
   }
