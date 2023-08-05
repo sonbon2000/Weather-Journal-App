@@ -5,6 +5,7 @@ projectData = {};
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const moment = require("moment");
 
 //  Set up Express
 const app = express();
@@ -28,7 +29,11 @@ app.get("/get", getData);
 
 // POST route
 const addData = (req, res) => {
-  projectData = req.body;
+  const obj = {
+    ...req.body,
+    dt: moment.unix(req.body.dt).format("YYYY-MM-DD"),
+  };
+  projectData = obj;
   res.send(projectData);
 };
 app.post("/add", addData);

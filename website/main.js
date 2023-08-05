@@ -6,6 +6,7 @@ const baseURL = "https://api.openweathermap.org/data/2.5/weather?q=";
 const button = document.querySelector("#generate");
 const nameRes = document.querySelector("#name");
 const tempRes = document.querySelector("#temp");
+const dateRes = document.querySelector("#date");
 const inputCities = document.querySelector("#cities");
 
 // Function call API
@@ -57,6 +58,7 @@ const render = async () => {
   try {
     const resData = await res.json();
     nameRes.textContent = `Cities name: ${resData?.name}`;
+    dateRes.textContent = `Date: ${resData?.dt}`;
     tempRes.textContent = `Temperature: ${resData?.main?.temp}`;
   } catch (error) {
     console.log("error", error);
